@@ -9,8 +9,9 @@
 ## get a matrix
 ## set the inverse of the matrix
 ## get the inverse of the matrix
-## 
 ## ---------------------------------------------------------------
+
+## Write a short comment describing this function
 
 makeCacheMatrix <- function(x = matrix()) {
 		m <- NULL
@@ -27,17 +28,7 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 
-## ---------------------------------------------------------------
-## This function computes the inverse of the special "matrix" returned by makeCacheMatrix above. 
-## If the inverse has already been calculated (and the matrix has not changed), then the cachesolve 
-## will retrieve the inverse from the cache.
-##
-## IMPORTANT: Assumes that the matrix supplied is always invertible
-## The following error is thrown if the matrix supplied is not invertible, for example non-square
-##
-## *** Error in solve.default(data, ...) : 'a' (8 x 2) must be square ***
-##
-## ---------------------------------------------------------------
+## Write a short comment describing this function
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
@@ -47,7 +38,19 @@ cacheSolve <- function(x, ...) {
 			return(m)
 		}
 		data <- x$get()
-		m <- solve(data, ...)
-		x$setinverse(m)
-		m
+		if (isSquareMatrix(data)) {
+			m <- solve(data, ...)
+			x$setinverse(m)
+			m
+		}
+		else {
+			message("****************************************************************")
+			message("This is not a square matrix. Cannot compute inverse.  Try again.")
+			message("****************************************************************")
+			data
+		}
+}
+
+isSquareMatrix <- function(input = matrix()) {
+		return(nrow(input) == ncol(input))
 }
