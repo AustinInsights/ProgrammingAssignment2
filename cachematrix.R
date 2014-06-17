@@ -13,14 +13,25 @@
 ## ---------------------------------------------------------------
 
 makeCacheMatrix <- function(x = matrix()) {
-		m <- NULL
+		matrixInverse <- NULL
+		
 		set <- function(y) {
 			x <<- y
-			m <<- NULL
+			matrixInverse <<- NULL
 		}
-		get <- function() x
-		setinverse <- function(inverse) m <<- inverse
-		getinverse <- function() m
+		
+		get <- function() {
+			x
+		}
+		
+		setinverse <- function(inverse) {
+			matrixInverse <<- inverse
+		}
+		
+		getinverse <- function() {
+			matrixInverse
+		}
+		
 		list(set = set, get = get,
 				setinverse = setinverse,
 				getinverse = getinverse)
@@ -35,19 +46,24 @@ makeCacheMatrix <- function(x = matrix()) {
 ## IMPORTANT: Assumes that the matrix supplied is always invertible
 ## The following error is thrown if the matrix supplied is not invertible, for example non-square
 ##
-## *** Error in solve.default(data, ...) : 'a' (8 x 2) must be square ***
+## *** Error in solve.default(originalMatrix, ...) : 'a' (8 x 2) must be square ***
 ##
 ## ---------------------------------------------------------------
 
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
-		m <- x$getinverse()
-		if(!is.null(m)) {
+		matrixInverse <- x$getinverse()
+		
+		if(!is.null(matrixInverse)) {
 			message("getting cached inverse")
-			return(m)
+			return(matrixInverse)
 		}
-		data <- x$get()
-		m <- solve(data, ...)
-		x$setinverse(m)
-		m
+		
+		originalMatrix <- x$get()
+		
+		matrixInverse <- solve(originalMatrix, ...)
+		
+		x$setinverse(matrixInverse)
+		
+		matrixInverse
 }
